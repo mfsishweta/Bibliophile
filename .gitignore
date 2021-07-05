@@ -1,0 +1,4 @@
+*.sqlite3
+/shelf/
+.idea
+frontend/node_modules
