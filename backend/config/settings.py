@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+# import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+# ROOT_DIR = environ.Path(__file__) - 2
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -39,15 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     #third party apps
 
     #user defined apps
-    'apps.books',
-    'apps.authors',
-    'apps.users',
-    'apps.lists',
-    'apps.feedbacks',
+
+    'backend.apps.coreauth.apps.CoreauthConfig',
+    'backend.apps.books.apps.BooksConfig',
+    'backend.apps.authors.apps.AuthorsConfig',
+    'backend.apps.users.apps.UsersConfig',
+    'backend.apps.lists.apps.ListsConfig',
+    'backend.apps.feedbacks.apps.FeedbacksConfig',
 
 ]
 

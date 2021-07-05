@@ -27,4 +27,3 @@ class User(AbstractUser, TimestampedModel):
 
 
 
-

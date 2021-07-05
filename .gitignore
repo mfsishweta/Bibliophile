@@ -1,4 +1,7 @@
 *.sqlite3
+**/**/*.pyc
+*.pyc
+/backend/.idea
 /shelf/
 .idea
 frontend/node_modules
