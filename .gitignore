@@ -1,6 +1,8 @@
 *.sqlite3
 **/**/*.pyc
 *.pyc
+__pycache__
+!**/__pycache__/
 /backend/.idea
 /shelf/
 .idea
