@@ -24,6 +24,7 @@ router = DefaultRouter()
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth/", include('apps.coreauth.urls')),
+    path("user/", include('apps.users.urls')),
     path('', include(router.urls)),
 ]
 

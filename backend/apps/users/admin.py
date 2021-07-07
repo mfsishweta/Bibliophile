@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class UserAdmin(BaseUserAdmin):
     model = User
-    search_fields = ['first_name']
+    search_fields = ['first_name', 'username']
 
 
 admin.site.register(User, UserAdmin)
