@@ -1,6 +1,6 @@
 from django.db import models
-from apps.users.models import TimestampedModel
-from apps.authors.models import Author
+from backend.apps.users.models import TimestampedModel
+from backend.apps.authors.models import Author
 # Create your models here.
 
 

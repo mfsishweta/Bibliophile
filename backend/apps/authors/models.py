@@ -1,5 +1,5 @@
 from django.db import models
-from apps.users.models import TimestampedModel
+from backend.apps.users.models import TimestampedModel
 
 # Create your models here.
 
