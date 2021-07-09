@@ -4,7 +4,7 @@ from rest_framework.fields import EmailField, CharField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from backend.apps.users.models import User
+from apps.users.models import User
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -43,16 +43,19 @@ class RegisterSerializer(ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        validated_data.pop('password2')
         user = User.objects.create(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            short_desc=validated_data['short_desc']
+            # username=validated_data['username'],
+            # email=validated_data['email'],
+            # first_name=validated_data['first_name'],
+            # last_name=validated_data['last_name'],
+            # short_desc=validated_data['short_desc']
+            **validated_data
         )
 
         user.set_password(validated_data['password'])
         user.save()
 
         return user
+
 

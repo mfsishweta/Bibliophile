@@ -1,6 +1,8 @@
 *.sqlite3
 **/**/*.pyc
 *.pyc
+env
+google_apps
 __pycache__
 !**/__pycache__/
 /backend/.idea

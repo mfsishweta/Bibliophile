@@ -18,12 +18,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
-
+from rest_framework_jwt.views import verify_jwt_token
 router = DefaultRouter()
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("auth/", include('apps.coreauth.urls')),
+    path("books/", include('apps.books.urls')),
+    path('api-token-verify/', verify_jwt_token),
     path("user/", include('apps.users.urls')),
     path('', include(router.urls)),
 ]
