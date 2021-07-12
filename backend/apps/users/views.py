@@ -1,56 +1,40 @@
-import datetime
-
-from django.db import transaction
-from django.http import HttpResponse
-from django.shortcuts import render
-
 # Create your views here.
-from rest_framework import status
+from rest_framework import status, renderers
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from backend.apps.users.models import User
+
+from apps.users.models import User
+from apps.users.serializer import UserUpdateSerializer
 
 
 class UserDetailsView(APIView):
     """
     API to get user details
     """
-    def get(self, request, *args, **kwargs):
-        user_id = kwargs['user_id']
-        if not user_id:
-            return Response({'status': "Mandatory data missing"}, status=404)
+    # permission_classes = (IsAuthenticated, )
+    renderer_classes = [renderers.JSONRenderer]
 
-        user = User.objects.filter(id=user_id).first()
-        user_response = {'id': user_id, 'first_name':user.first_name,'last_name':user.last_name,'username': user.username, 'short_desc': user.short_desc,
-                         'email': user.email, 'is_active': user.is_active}
-        return Response(user_response, status.HTTP_200_OK)
+    def get(self, request, user_id):
+        """
+        API to get User details
+        """
+        try:
+            user = User.objects.get(id=user_id)
+            user_response = {'id': user_id, 'first_name': user.first_name, 'last_name': user.last_name,
+                             'username': user.username, 'short_desc': user.short_desc,
+                             'email': user.email, 'is_active': user.is_active}
+            return Response(user_response, status.HTTP_200_OK)
+        except Exception as e:
+            return APIException(str(e))
 
-    def post(self, request,user_id):
+    def post(self, request, user_id):
         """
         API to update User details
         """
-        user_id = user_id
-        first_name = request.data.get('first_name')
-        last_name = request.data.get('last_name')
-        email = request.data.get('email')
-        short_desc = request.data.get('short_desc')
-
-        if not all([first_name, last_name, email, user_id]):
-            return Response({"status":"All the fields are mandatory"}, status=400)
-
-        user = User.objects.filter(id=user_id).first()
-
-        if not user:
-            return HttpResponse("Incorrect User Id", status=400)
-
-        with transaction.atomic():
-            user.first_name = first_name.strip()
-            user.last_name = last_name.strip()
-            user.email = email
-            user.short_desc = short_desc
-            user.updated_at = datetime.datetime.now()
-            user.save()
-
-        return HttpResponse("Updated successfully", status=200)
-
-
+        user = User.objects.get(id=user_id)
+        serializer = UserUpdateSerializer(user, data=request.data)
+        if not serializer.is_valid():
+            raise APIException(serializer.errors)
+        serializer.save()
+        return Response({'result': "Updated Successfully!"}, status=status.HTTP_200_OK)

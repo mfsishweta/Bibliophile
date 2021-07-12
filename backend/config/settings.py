@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ty2kdkki#%ty3_-gelm*@ljy2=vxhle)ufrpsd0#ris_-4)m(b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -40,17 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_jwt',
 
     #third party apps
-
+    'django_extensions',
     #user defined apps
 
-    'backend.apps.coreauth.apps.CoreauthConfig',
-    'backend.apps.books.apps.BooksConfig',
-    'backend.apps.authors.apps.AuthorsConfig',
-    'backend.apps.users.apps.UsersConfig',
-    'backend.apps.lists.apps.ListsConfig',
-    'backend.apps.feedbacks.apps.FeedbacksConfig',
+    'apps.coreauth.apps.CoreauthConfig',
+    'apps.books.apps.BooksConfig',
+    'apps.authors.apps.AuthorsConfig',
+    'apps.users.apps.UsersConfig',
+    'apps.lists.apps.ListsConfig',
+    'apps.feedbacks.apps.FeedbacksConfig',
 
 ]
 
@@ -63,6 +64,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#         # 'rest_framework.authentication.SessionAuthentication',
+#         # 'rest_framework.authentication.BasicAuthentication',
+#     ],
+# }
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -91,7 +103,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bibliophile_app',
+        'NAME': 'bibliophile',
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': 'localhost',

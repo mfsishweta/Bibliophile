@@ -1,6 +1,10 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from backend.apps.users.models import TimestampedModel
-from backend.apps.authors.models import Author
+
+from apps.authors.models import Author
+from apps.users.models import TimestampedModel
+
+
 # Create your models here.
 
 
@@ -12,18 +16,13 @@ class Genre(models.Model):
 
 
 class Book(TimestampedModel):
-    name = models.CharField(max_length=50)
+    volume_id = models.CharField(max_length=100)
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    publish_date = models.DateTimeField(null=True, blank=True)
+    authors = models.ManyToManyField(Author, null=True, blank=True)
 
     class Meta:
         db_table = "books"
-
-
-class BookAuthor(TimestampedModel):
-
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "books_authors"
 
 

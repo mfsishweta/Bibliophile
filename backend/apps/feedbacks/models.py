@@ -1,6 +1,8 @@
+from apps.books.models import Book
+from apps.users.models import TimestampedModel, User
 from django.db import models
-from backend.apps.users.models import TimestampedModel, User
-from backend.apps.books.models import Book
+
+
 # Create your models here.
 
 

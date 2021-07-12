@@ -1,2 +1,8 @@
 djangorestframework
 djangorestframework-simplejwt
+requests
+google-api-python-client
+google-auth
+google-auth-httplib2
+oauth2client
+oauthlib
