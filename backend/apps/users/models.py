@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import EmailValidator
 from django.db import models
 
 
@@ -14,6 +15,7 @@ class User(AbstractUser, TimestampedModel):
     first_name = models.CharField(max_length=30, null=True)
     last_name = models.CharField(max_length=30, null=True)
     username = models.CharField(max_length=70, unique=True)
+    email = models.EmailField(max_length=254, unique=True, validators=[EmailValidator])
     # profile_pic = models.ImageField(null=True, blank=True)
     friend = models.ManyToManyField('self')
     short_desc = models.CharField(max_length=150, null=True, blank=True)
@@ -30,4 +32,3 @@ class FriendRequest(TimestampedModel):
 
     class Meta:
         db_table = 'friend_requests'
-

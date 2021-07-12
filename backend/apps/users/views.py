@@ -90,11 +90,11 @@ class AcceptFriendRequestView(APIView):
         friend_request = FriendRequest.objects.filter(id=friend_request_id).first()
         try:
             if friend_request and friend_request.to_user == request.user:
-                # with transaction.atomic:
-                friend_request.to_user.friend.add(friend_request.from_user)
-                friend_request.from_user.friend.add(friend_request.to_user)
-                friend_request.to_user.save()
-                friend_request.from_user.save()
+                with transaction.atomic:
+                    friend_request.to_user.friend.add(friend_request.from_user)
+                    friend_request.from_user.friend.add(friend_request.to_user)
+                    friend_request.to_user.save()
+                    friend_request.from_user.save()
 
                 # friend_request.to_user.save(update_fields=['friend'])
                 # friend_request.from_user.save(update_fields=['friend'])

@@ -1,9 +1,12 @@
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import EmailField, CharField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from apps.coreauth.otp_service.otp_manager import EmailSender
 from apps.users.models import User
 
 
@@ -54,8 +57,9 @@ class RegisterSerializer(ModelSerializer):
         )
 
         user.set_password(validated_data['password'])
+        # with transaction.atomic:
         user.save()
+        # user = User.objects.get(email)
+        EmailSender().create_and_send_email(user.id)
 
         return user
-
-
