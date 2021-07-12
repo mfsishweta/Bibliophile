@@ -4,7 +4,7 @@ import dateparser as dateparser
 from apps.books.models import Book
 from common.utils.google_api_utils import GoogleBooksManager
 
-from backend.common.utils.google_api_utils import BookVolumeInfo
+from common.utils.google_api_utils import BookVolumeInfo
 
 
 def try_dateparser(date: str) -> datetime.datetime:
