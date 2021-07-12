@@ -1,7 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-
-# Create your models here.
+from django.db import models
 
 
 class TimestampedModel(models.Model):
@@ -26,4 +24,10 @@ class User(AbstractUser, TimestampedModel):
         db_table = "users"
 
 
+class FriendRequest(TimestampedModel):
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'friend_requests'
 
