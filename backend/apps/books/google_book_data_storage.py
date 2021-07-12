@@ -15,11 +15,11 @@ class BODOAdapter:
     def adapt_to_book_model(self, book_volume_info: BookVolumeInfo) -> Book:
         book = Book()
         book.volume_id = book_volume_info.volume_id
-        book.title = book_volume_info.title[:48]
+        book.title = book_volume_info.title
         book.publish_date = try_dateparser(book_volume_info.publish_date)
         # book.authors = book_volume_info.list_of_authors
         desc = book_volume_info.description
-        book.description = desc[:998] if desc else None
+        book.description = desc if desc else None
         return book
 
     def _extract_date(self, book_volume_info):

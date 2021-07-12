@@ -17,8 +17,8 @@ class Genre(models.Model):
 
 class Book(TimestampedModel):
     volume_id = models.CharField(max_length=100)
-    title = models.CharField(max_length=50)
-    description = models.CharField(max_length=1000, null=True, blank=True)
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=10000, null=True, blank=True)
     publish_date = models.DateTimeField(null=True, blank=True)
     authors = models.ManyToManyField(Author, null=True, blank=True)
 
