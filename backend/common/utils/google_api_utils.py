@@ -12,14 +12,18 @@ class BookVolumeInfo:
         self.description = description
 
 
-class BookApiClientGenerator:
+class GoogleApiClientGenerator:
     def __init__(self):
-        self.scope_list = ["https://www.googleapis.com/auth/books"]
+        self.scope_list = ["https://www.googleapis.com/auth/books", 'https://www.googleapis.com/auth/gmail.send']
         self.book_credential_path = "google_apps/google_apps_testing_account/book_credentials.json"
+        self.gmail_credential_path = "google_apps/google_apps_testing_account/gmail_credentials.json"
         self.api_specific_dict = {"books": {"credentials_file": self.book_credential_path,
+                                            "version": 'v1'},
+                                  "gmail": {"credentials_file": self.book_credential_path,
                                             "version": 'v1'}
                                   }
         self.book_service = None
+        self.gmail_service = None
 
     def get_service_instance(self, api_name):
         credentials_file = self.api_specific_dict[api_name]['credentials_file']
@@ -41,6 +45,7 @@ class BookApiClientGenerator:
 
     def populate_service_instances(self):
         self.book_service = self.get_service_instance('books')
+        self.gmail_service = self.get_service_instance('gmail')
 
 
 class GoogleBooksManager:
@@ -49,7 +54,7 @@ class GoogleBooksManager:
         return GoogleBooksExplorer().search_by_volume(book_client.book_service, search_str)
 
     def _setup_apps_attributes(self):
-        book_client = BookApiClientGenerator()
+        book_client = GoogleApiClientGenerator()
         book_client.authorize_the_apis()
         return book_client
 
@@ -70,12 +75,12 @@ class GoogleBooksExplorer:
     def _get_book_volume(self, item):
         volume_id = item['id']
         title = item['volumeInfo']['title']
-        authors = item.get('volumeInfo').get('authors',None)
+        authors = item.get('volumeInfo').get('authors', None)
         published_date = item['volumeInfo']['publishedDate']
         description = item.get('volumeInfo').get('description', None)
         return BookVolumeInfo(volume_id, title, authors, published_date, description)
 
 
 if __name__ == "__main__":
-    # BookApiClientGenerator().authorize_the_apis()
-    GoogleBooksManager().search_books_by_name()
+    GoogleApiClientGenerator().authorize_the_apis()
+    # GoogleBooksManager().search_books_by_name()
