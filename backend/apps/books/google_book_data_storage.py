@@ -1,10 +1,10 @@
 import datetime
 
 import dateparser as dateparser
-from apps.books.models import Book
-from common.utils.google_api_utils import GoogleBooksManager
 
+from apps.books.models import Book
 from common.utils.google_api_utils import BookVolumeInfo
+from common.utils.google_api_utils import GoogleBooksManager
 
 
 def try_dateparser(date: str) -> datetime.datetime:
@@ -16,7 +16,7 @@ class BODOAdapter:
         book = Book()
         book.volume_id = book_volume_info.volume_id
         book.title = book_volume_info.title
-        book.publish_date = try_dateparser(book_volume_info.publish_date)
+        book.publish_date = try_dateparser(book_volume_info.publish_date) if book_volume_info.publish_date else None
         # book.authors = book_volume_info.list_of_authors
         desc = book_volume_info.description
         book.description = desc if desc else None
