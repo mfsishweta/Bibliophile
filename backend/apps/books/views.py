@@ -1,10 +1,5 @@
 import traceback
 
-# Create your views here.
-from apps.books.google_book_data_storage import BooksDataExtractor
-from apps.books.models import Book
-from apps.books.serializers import BookRatingsSerializer
-from apps.feedbacks.models import UserBookRatingReviews
 from django.db import transaction
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -12,7 +7,14 @@ from rest_framework import renderers, serializers
 from rest_framework.exceptions import APIException
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from apps.books.google_book_data_storage import BooksDataExtractor
+from apps.books.models import Book
+from apps.books.serializers import BookRatingsSerializer
+from apps.coreauth.views import BearerAuthentication
+from apps.feedbacks.models import UserBookRatingReviews
 
 
 class Paginator(LimitOffsetPagination):
@@ -48,6 +50,8 @@ class SearchBookQuerySerializer(serializers.Serializer):
 class SearchBookItems(ListAPIView):
     pagination_class = Paginator
     renderer_classes = [renderers.JSONRenderer]
+    authentication_classes = (BearerAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -93,6 +97,8 @@ class BookSerializer(serializers.ModelSerializer):
 class BookRatings(ListAPIView):
     pagination_class = Paginator
     renderer_classes = [renderers.JSONRenderer]
+    authentication_classes = (BearerAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         try:
@@ -119,4 +125,3 @@ class BookRatings(ListAPIView):
 
     def get_serializer_class(self):
         return BookRatingsSerializer
-
