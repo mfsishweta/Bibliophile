@@ -57,9 +57,9 @@ class RegisterSerializer(ModelSerializer):
         )
 
         user.set_password(validated_data['password'])
-        # with transaction.atomic:
-        user.save()
-        # user = User.objects.get(email)
-        EmailSender().create_and_send_email(user.id)
+        with transaction.atomic():
+            user.save()
+            # user = User.objects.get(email)
+            EmailSender().create_and_send_email(user.id)
 
         return user

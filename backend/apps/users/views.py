@@ -4,18 +4,18 @@ import traceback
 from django.db import transaction
 from django.http import JsonResponse
 from rest_framework import status, renderers
-from rest_framework.authentication import TokenAuthentication
+
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.coreauth.views import BearerAuthentication
 from apps.users.models import User, FriendRequest
 from apps.users.serializer import UserUpdateSerializer
 
 
-class BearerAuthentication(TokenAuthentication):
-    keyword = 'Bearer'
+
 
 
 class UserDetailsView(APIView):
@@ -90,14 +90,11 @@ class AcceptFriendRequestView(APIView):
         friend_request = FriendRequest.objects.filter(id=friend_request_id).first()
         try:
             if friend_request and friend_request.to_user == request.user:
-                with transaction.atomic:
+                with transaction.atomic():
                     friend_request.to_user.friend.add(friend_request.from_user)
                     friend_request.from_user.friend.add(friend_request.to_user)
                     friend_request.to_user.save()
                     friend_request.from_user.save()
-
-                # friend_request.to_user.save(update_fields=['friend'])
-                # friend_request.from_user.save(update_fields=['friend'])
                 friend_request.delete()
                 return JsonResponse({'result': "Friend Request Accepted!"}, status=status.HTTP_200_OK)
             else:
