@@ -1,6 +1,6 @@
 from django.contrib import admin
+
 from .models import *
-# Register your models here.
 
 
 class ListTypeAdmin(admin.ModelAdmin):
@@ -9,6 +9,9 @@ class ListTypeAdmin(admin.ModelAdmin):
 
 class UserListAdmin(admin.ModelAdmin):
     model = UserList
+    search_fields = ['user']
+    # filter_horizontal = ['book']
+    list_display = ['id', 'user', 'list']
 
 
 admin.site.register(ListType, ListTypeAdmin)

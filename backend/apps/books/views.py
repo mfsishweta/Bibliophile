@@ -15,6 +15,7 @@ from apps.books.models import Book
 from apps.books.serializers import BookRatingsSerializer
 from apps.coreauth.views import BearerAuthentication
 from apps.feedbacks.models import UserBookRatingReviews
+from apps.lists.models import UserList
 
 
 class Paginator(LimitOffsetPagination):
@@ -125,3 +126,17 @@ class BookRatings(ListAPIView):
 
     def get_serializer_class(self):
         return BookRatingsSerializer
+
+
+class SaveBookInListView(APIView):
+    renderer_classes = [renderers.JSONRenderer]
+    authentication_classes = (BearerAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        book_id = request.GET.get('book_id')
+        list_type = request.GET.get('list_type')
+        user = request.user
+
+        user_list_object = UserList.objects.filter(user__id=user.id, list__iexact=list_type).values()
+        print('######################',user_list_object)

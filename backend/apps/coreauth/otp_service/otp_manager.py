@@ -27,7 +27,7 @@ class OTPAuthenticationRecordGenerator:
         if not otp_query_set:
             return None
         otp_record = otp_query_set.first()
-        if otp_record.expiry_at < datetime.now():
+        if otp_record.expire_at < datetime.now().replace(tzinfo=None):
             return None
         return otp_record.otp
 

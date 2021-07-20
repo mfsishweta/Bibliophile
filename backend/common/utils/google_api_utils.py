@@ -76,7 +76,7 @@ class GoogleBooksExplorer:
         volume_id = item['id']
         title = item['volumeInfo']['title']
         authors = item.get('volumeInfo').get('authors', None)
-        published_date = item['volumeInfo']['publishedDate']
+        published_date = item.get('volumeInfo').get('publishedDate', None)
         description = item.get('volumeInfo').get('description', None)
         return BookVolumeInfo(volume_id, title, authors, published_date, description)
 

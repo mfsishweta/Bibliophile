@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import *
 
@@ -11,7 +10,7 @@ class UserAdmin(admin.ModelAdmin):
     model = User
     search_fields = ['first_name', 'username']
     filter_horizontal = ('friend',)
-    list_display = ['first_name', 'last_name', 'username', 'is_active']
+    list_display = ['first_name', 'last_name', 'username', 'is_active', 'email_verified']
 
 
 class FriendRequestAdmin(admin.ModelAdmin):

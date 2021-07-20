@@ -1,7 +1,7 @@
 from django.db import models
-from apps.users.models import TimestampedModel, User
+
 from apps.books.models import Book
-# Create your models here.
+from apps.users.models import TimestampedModel, User
 
 
 class ListType(TimestampedModel):
@@ -12,10 +12,16 @@ class ListType(TimestampedModel):
         db_table = "list_types"
 
 
+ListChoices = (('w', 'wishlist'),
+               ('r', 'readlist'),
+               ('s', 'shelflist')
+               )
+
+
 class UserList(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    list = models.ForeignKey(ListType, on_delete=models.CASCADE)
+    book = models.ManyToManyField(Book, null=True)
+    list = models.CharField(max_length=20, choices=ListChoices)
 
     class Meta:
         db_table = "user_lists"

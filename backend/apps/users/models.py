@@ -16,6 +16,7 @@ class User(AbstractUser, TimestampedModel):
     last_name = models.CharField(max_length=30, null=True)
     username = models.CharField(max_length=70, unique=True)
     email = models.EmailField(max_length=254, unique=True, validators=[EmailValidator])
+    email_verified = models.BooleanField(default=False)
     # profile_pic = models.ImageField(null=True, blank=True)
     friend = models.ManyToManyField('self')
     short_desc = models.CharField(max_length=150, null=True, blank=True)
