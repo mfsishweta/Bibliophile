@@ -1,6 +1,9 @@
+from django.utils import timezone
 import random
 import string
 from datetime import datetime, timedelta
+
+from django.utils import timezone
 
 from apps.coreauth.models import OTPAuthentication
 from apps.users.models import User
@@ -22,33 +25,34 @@ class OTPAuthenticationRecordGenerator:
             return otp
         return self._create_otp(user_id)
 
-    def _get_saved_otp_from_db(self, user_id):
-        otp_query_set = OTPAuthentication.objects.filter(user__id=user_id)
+    def _get_saved_otp_from_db(self, user):
+        otp_query_set = OTPAuthentication.objects.filter(user=user)
         if not otp_query_set:
             return None
         otp_record = otp_query_set.first()
-        if otp_record.expire_at < datetime.now().replace(tzinfo=None):
+        if otp_record.expire_at < timezone.now():
             return None
         return otp_record.otp
 
     def _create_otp(self, user_id):
         # TODO: get OTP length,TTL(live duration) from settings.py
         otp = OTPGenerator.generate(5)
-        current_datetime = datetime.now()
-        expire_at = current_datetime + timedelta(minutes=1)
+        current_datetime = timezone.now()
+        expire_at = current_datetime + timedelta(minutes=5)
         user = User.objects.get(id=user_id)
         OTPAuthentication.objects.create(user=user, otp=otp, expire_at=expire_at)
         return otp
 
-    def validate_otp(self, user_id, user_otp):
-        existing_otp = self._get_saved_otp_from_db(user_id)
+    def validate_otp(self, user, user_otp):
+        existing_otp = self._get_saved_otp_from_db(user)
         is_valid = existing_otp == user_otp
+        print(existing_otp,'***',user_otp)
         if is_valid:
-            self._expire_current_otp(user_id)
+            self._expire_current_otp(user)
         return is_valid
 
-    def _expire_current_otp(self, user_id):
-        otp_record = OTPAuthentication.objects.filter(user__id=user_id).first()
+    def _expire_current_otp(self, user):
+        otp_record = OTPAuthentication.objects.filter(user=user).first()
         otp_record.expire_at = datetime.now()
         otp_record.save(update_fields=['expire_at'])
 

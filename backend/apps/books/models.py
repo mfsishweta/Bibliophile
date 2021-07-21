@@ -20,7 +20,7 @@ class Book(TimestampedModel):
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=10000, null=True, blank=True)
     publish_date = models.DateTimeField(null=True, blank=True)
-    authors = models.ManyToManyField(Author, null=True, blank=True)
+    authors = models.ManyToManyField(Author, blank=True)
 
     class Meta:
         db_table = "books"

@@ -23,14 +23,13 @@ class EmailHandler:
         return body
 
     def send_message(self, sender, subject, to, msg_plain):
-        service = self._setup_apps_attributes()
+        gmail_service = self._setup_apps_attributes()
         message = self._create_message(sender, subject, to, msg_plain)
-        self._send_message_internal(service, 'me', message)
+        self._send_message_internal(gmail_service, 'me', message)
 
     def _setup_apps_attributes(self):
         gmail_client = GoogleApiClientGenerator()
-        gmail_client.authorize_the_apis()
-        return gmail_client.gmail_service
+        return gmail_client.authorize_the_apis('gmail')
 
     def _send_message_internal(self, service, user_id, message):
         try:

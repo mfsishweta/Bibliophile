@@ -20,7 +20,7 @@ ListChoices = (('w', 'wishlist'),
 
 class UserList(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ManyToManyField(Book, null=True)
+    book = models.ManyToManyField(Book)
     list = models.CharField(max_length=20, choices=ListChoices)
 
     class Meta:

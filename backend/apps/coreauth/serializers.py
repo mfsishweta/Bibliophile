@@ -7,6 +7,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.coreauth.otp_service.otp_manager import EmailSender
+from apps.lists.models import UserList
 from apps.users.models import User
 
 
@@ -47,19 +48,21 @@ class RegisterSerializer(ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
-        user = User.objects.create(
-            # username=validated_data['username'],
-            # email=validated_data['email'],
-            # first_name=validated_data['first_name'],
-            # last_name=validated_data['last_name'],
-            # short_desc=validated_data['short_desc']
-            **validated_data
-        )
-
-        user.set_password(validated_data['password'])
         with transaction.atomic():
+            user = User.objects.create(
+                **validated_data
+            )
+
+            user.set_password(validated_data['password'])
+
             user.save()
             # user = User.objects.get(email)
+            UserList.objects.bulk_create([
+                UserList(user=user, list='r'),
+                 UserList(user=user, list='w'),
+                 UserList(user=user, list='s')
+            ])
+            print('@@@@@@@@@@@@@@@@@@@@',user.username)
             EmailSender().create_and_send_email(user.id)
 
         return user
